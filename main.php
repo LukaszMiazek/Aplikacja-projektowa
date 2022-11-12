@@ -28,7 +28,22 @@
 		</form>	
 		
 		<a href="edit.php">Edytuj konto</a>
+		<br>
+		<a href="new.php">Utwórz nowy projekt</a>
+		<br>
+		PROJEKTY:
 		<?php
+		$part = R::find('part', ' id_user = ? ', [$_SESSION['user']] );
+		foreach ($part as $pro)
+		{
+			echo '<br>';
+			$na = R::findOne('task', 'id = ?', [$pro->id_task] );
+			echo '<a href="project.php?id=';
+			echo $pro->id_task;
+			echo '">';
+			echo $na->nazwa;
+			echo '</a>';
+		}
 	}
 	else
 	{

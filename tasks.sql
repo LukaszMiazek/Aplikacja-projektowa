@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 11 Lis 2022, 20:33
+-- Czas generowania: 12 Lis 2022, 18:40
 -- Wersja serwera: 10.4.8-MariaDB
 -- Wersja PHP: 7.1.32
 
@@ -25,6 +25,47 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Struktura tabeli dla tabeli `part`
+--
+
+CREATE TABLE `part` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `id_user` int(11) UNSIGNED DEFAULT NULL,
+  `id_task` int(11) UNSIGNED DEFAULT NULL,
+  `role` int(11) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Zrzut danych tabeli `part`
+--
+
+INSERT INTO `part` (`id`, `id_user`, `id_task`, `role`) VALUES
+(2, 15, 3, 3),
+(3, 16, 3, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `task`
+--
+
+CREATE TABLE `task` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `nazwa` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `opis` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `wlasciciel` int(11) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Zrzut danych tabeli `task`
+--
+
+INSERT INTO `task` (`id`, `nazwa`, `opis`, `wlasciciel`) VALUES
+(3, 'pro2', 'bbb', 15);
+
+-- --------------------------------------------------------
+
+--
 -- Struktura tabeli dla tabeli `user`
 --
 
@@ -33,19 +74,33 @@ CREATE TABLE `user` (
   `login` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `haslo` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `imie` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `nazwisko` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `nazwisko` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `opis` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Zrzut danych tabeli `user`
 --
 
-INSERT INTO `user` (`id`, `login`, `haslo`, `imie`, `nazwisko`) VALUES
-(15, 'user1', 'haslo1', 'tomek', 'ryba');
+INSERT INTO `user` (`id`, `login`, `haslo`, `imie`, `nazwisko`, `opis`) VALUES
+(15, 'user1', 'haslo1', 'tomek', 'ryba', 'bbb'),
+(16, 'user2', 'haslo2', 'hubert', 'lama', NULL);
 
 --
 -- Indeksy dla zrzutów tabel
 --
+
+--
+-- Indeksy dla tabeli `part`
+--
+ALTER TABLE `part`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeksy dla tabeli `task`
+--
+ALTER TABLE `task`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indeksy dla tabeli `user`
@@ -58,10 +113,22 @@ ALTER TABLE `user`
 --
 
 --
+-- AUTO_INCREMENT dla tabeli `part`
+--
+ALTER TABLE `part`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT dla tabeli `task`
+--
+ALTER TABLE `task`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT dla tabeli `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
