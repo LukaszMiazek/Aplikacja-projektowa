@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 13 Lis 2022, 17:33
+-- Czas generowania: 13 Lis 2022, 19:51
 -- Wersja serwera: 10.4.8-MariaDB
 -- Wersja PHP: 7.1.32
 
@@ -40,9 +40,29 @@ CREATE TABLE `part` (
 --
 
 INSERT INTO `part` (`id`, `id_user`, `id_task`, `role`) VALUES
-(2, 15, 3, 2),
+(2, 15, 3, 3),
 (3, 16, 3, 2),
-(7, 17, 3, 3);
+(23, 17, 3, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `role_names`
+--
+
+CREATE TABLE `role_names` (
+  `id` int(11) NOT NULL,
+  `nazwa` varchar(32) COLLATE utf16_polish_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_polish_ci;
+
+--
+-- Zrzut danych tabeli `role_names`
+--
+
+INSERT INTO `role_names` (`id`, `nazwa`) VALUES
+(1, 'członek'),
+(2, 'moderator'),
+(3, 'admin');
 
 -- --------------------------------------------------------
 
@@ -75,18 +95,17 @@ CREATE TABLE `user` (
   `login` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `haslo` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `imie` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `nazwisko` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `opis` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `nazwisko` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Zrzut danych tabeli `user`
 --
 
-INSERT INTO `user` (`id`, `login`, `haslo`, `imie`, `nazwisko`, `opis`) VALUES
-(15, 'user1', 'haslo1', 'tomek', 'ryba', 'bbb'),
-(16, 'user2', 'haslo2', 'hubert', 'lama', NULL),
-(17, 'user3', 'haslo3', 'ewa', 'jabłko', NULL);
+INSERT INTO `user` (`id`, `login`, `haslo`, `imie`, `nazwisko`) VALUES
+(15, 'user1', 'haslo1', 'tomek', 'ryba'),
+(16, 'user2', 'haslo2', 'hubert', 'lama'),
+(17, 'user3', 'haslo3', 'ewa', 'jabłko');
 
 --
 -- Indeksy dla zrzutów tabel
@@ -96,6 +115,12 @@ INSERT INTO `user` (`id`, `login`, `haslo`, `imie`, `nazwisko`, `opis`) VALUES
 -- Indeksy dla tabeli `part`
 --
 ALTER TABLE `part`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeksy dla tabeli `role_names`
+--
+ALTER TABLE `role_names`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -118,13 +143,19 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT dla tabeli `part`
 --
 ALTER TABLE `part`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+
+--
+-- AUTO_INCREMENT dla tabeli `role_names`
+--
+ALTER TABLE `role_names`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT dla tabeli `task`
 --
 ALTER TABLE `task`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT dla tabeli `user`

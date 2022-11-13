@@ -13,6 +13,20 @@
 	require 'rb-mysql.php';
 	R::setup( 'mysql:host=localhost;dbname=tasks','root', '' );
 	
+	if (isset ($_POST['task_id_delete']))
+	{
+		$del = R::find('part', ' id_task = ?', [ $_POST['task_id_delete'] ] );
+		
+		foreach ($del as $dl)
+		{ 
+			R::trash( $dl );
+		}
+		
+		$delete = R::findOne('task', ' id = ?', [$_POST['task_id_delete'] ]);
+		R::trash( $delete );
+		
+		header('Location: main.php');
+	}
 	if (isset ($_POST['uzytkownik']))
 	{
 			$log = R::findOne('user', 'login = ? ', [$_POST ['uzytkownik']]);
@@ -70,6 +84,7 @@
 			?><img src="Profil/default.png" alt=":(" width="42" height="42" style="obrazek"><?php
 		}
 		
+		
 		$tas = R::findOne('task', 'id = ? ', [$_POST['task']]);
 		
 		?>
@@ -77,9 +92,11 @@
 		<input type="hidden" name="wlog"	required>
 		<button type="submit">Wyloguj się</button>
 		</form>	
-		
-		<a href="main.php">Powrót</a>
 		<br>
+		
+		<?php
+		echo '<a href="project.php?id='.$id_pro.'">Powrót</a>';
+		?>
 		
  		<form action="edit_project.php" method="post">
 		<input type="text" value="<?php echo $tas->nazwa ?>" name="nazwa" required>
@@ -98,6 +115,12 @@
 		<input type="text" name="uzytkownik" required>
 		<input type="hidden" name="task_id" value= <?php echo '"'.$id_pro.'"'; ?>> 
 		<button type="submit">Dodaj</button>
+		</form>
+		
+		Usuń projekt
+		<form action="" method="post">
+		<input type="hidden" name="task_id_delete" value= <?php echo '"'.$id_pro.'"'; ?>> 
+		<button type="submit">Usuń</button>
 		</form>	
 		
 		<?php

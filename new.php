@@ -17,14 +17,24 @@
 	{
 		$log = R::findOne('user', 'id = ? ', [$_SESSION['user']]);
 		
-		echo "Zalogowany: ".$log->login
+		echo "Zalogowany: ".$log->login;
+		
+		if(file_exists('Profil/'.$log->id.'.png'))
+		{
+			?><img src="Profil/<?php echo $log->id ?>.png" alt=":(" width="42" height="42" style="obrazek"><?php
+		}
+		else 
+		{
+			?><img src="Profil/default.png" alt=":(" width="42" height="42" style="obrazek"><?php
+		}
 		?>
-		<img src="Profil/<?php echo $log->id ?>.png" alt=":(" width="42" height="42" style="obrazek">
 		
 		<form action="index.php" method="post">
 		<input type="hidden" name="wlog"	required>
 		<button type="submit">Wyloguj się</button>
 		</form>	
+		
+		<a href="main.php">Powrót</a>
 		
 		<?php
 		if (!isset ($_POST['nazwa']))
@@ -63,13 +73,15 @@
 			$tas->wlasciciel=$_SESSION['user'];
 			$id = R::store( $tas );
 			
+			$ids=$id;
+			
 			$par = R::dispense('part');
 			$par->id_user=$_SESSION['user'];
 			$par->id_task=$id;
 			$par->role=3;
 			$id = R::store( $par );
 			
-			header('Location: project.php?id='.$id);
+			header('Location: project.php?id='.$ids);
 		}
 	}
 		else

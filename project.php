@@ -13,6 +13,31 @@
 	require 'rb-mysql.php';
 	R::setup( 'mysql:host=localhost;dbname=tasks','root', '' );
 	
+	if (isset ($_POST['user_mod']))
+	{	
+		$mod = R::findOne('part', ' id_user = ? AND id_task = ? ', [ $_POST['user_id'], $_POST['task_id'] ]);
+		
+		$zm = R::load( 'part', $mod['id'] );
+		
+		if($zm->role == 1)
+		{
+			$zm->role = 2;
+		}
+		else
+		{
+			$zm->role = 1;
+		}
+		
+		R::store( $zm );
+	}
+	if (isset ($_POST['user_del']))
+	{	
+		/* $del = R::find('part', ' id_user = ? AND id_task = ? ', [ $_POST['user_id'], $_POST['task_id'] ]);
+		foreach ($del as $dl) { R::trash( $dl ); }*/
+		
+		$del = R::findOne('part', ' id_user = ? AND id_task = ? ', [ $_POST['user_id'], $_POST['task_id'] ]);
+		R::trash( $del );
+	}
 	if (isset ($_POST['uzytkownik']))
 	{
 			$log = R::findOne('user', 'login = ? ', [$_POST ['uzytkownik']]);
@@ -34,6 +59,7 @@
 		
 		echo "Zalogowany: ".$log->login;
 		
+		
 		if(file_exists('Profil/'.$log->id.'.png'))
 		{
 			?><img src="Profil/<?php echo $log->id ?>.png" alt=":(" width="42" height="42" style="obrazek"><?php
@@ -54,11 +80,13 @@
 		</form>	
 		
 		<?php 
-			$acc = R::findOne('part', 'id_task = ? AND id_user=? AND role=3', [$id_pro, $_SESSION['user']] );
+			$acc = R::findOne('part', 'id_task = ? AND id_user=?', [$id_pro, $_SESSION['user']] );
 			
+			if($acc['role']==3) $access=3;
+			else if($acc['role']==2) $access=2;
+			else $access=1;
 
-			
-			if(!empty($acc))
+			if( $access == 3 )
 			{
 		?>
 			<form action="edit_project.php" method="post">
@@ -72,9 +100,13 @@
 		<?php 
 			$us = R::findOne('task', 'id = ?', [$id_pro] );
 			
-			echo $us->nazwa;
+			echo $us['nazwa'];
 			echo '<br>OPIS:';
-			echo $us->opis;
+			echo $us['opis'];
+			
+			
+		if( $access > 1)
+		{
 		?>
 		
 		<br>
@@ -83,20 +115,50 @@
 		<input type="text" name="uzytkownik" required>
 		<select name="rola">
 		  <option value="1">Członek</option>
-		  <option value="2">Moderator</option>
+		<?php if( $access ==3) { ?><option value="2">Moderator</option><?php } ?>
 		</select>
 		<input type="hidden" name="task_id" value= <?php echo '"'.$id_pro.'"'; ?>> 
 		<button type="submit">Dodaj</button>
 		</form>	
 		
 		<?php
+		}
 		
 		$part = R::find('part', ' id_task = ? ', [$id_pro] );
 		
 		foreach ($part as $usr)
 		{
 			$us = R::findOne('user', 'id = ?', [$usr->id_user] );
-			echo '<br>'.$us['login'];
+			
+			$nm = R::findOne('role_names', 'id = ? AND id != 1', [$usr->role] );
+			
+			echo '<br>'.$us['login'].' '.$nm['nazwa'];
+			
+			if( $access==3 && $usr->role!=3 || $access==2 && $usr->role==1)
+			{
+			?>
+				<form action="" method="post">
+				<input type="hidden" name="user_id" value= <?php echo '"'.$us['id'].'"'; ?>> 
+				<input type="hidden" name="task_id" value= <?php echo '"'.$id_pro.'"'; ?>> 
+				<button type="submit" name="user_del">Usuń</button>
+				</form>	
+				
+				
+			<?php
+			}
+			if( $access==3 && $usr->role!=3 )
+			{
+			?>
+				<form action="" method="post">
+				<input type="hidden" name="user_id" value= <?php echo '"'.$us['id'].'"'; ?>>
+				<input type="hidden" name="task_id" value= <?php echo '"'.$id_pro.'"'; ?>> 
+				<button type="submit" name="user_mod">Moderator</button>
+				</form>	
+			<?php
+			}
+			?>
+				
+			<?php
 		}
 	}
 	else
