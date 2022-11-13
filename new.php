@@ -69,7 +69,7 @@
 			$par->role=3;
 			$id = R::store( $par );
 			
-			header('Location: project.php?id='.$id); //<!-- zmienić aby przekierowywało bezpośrednio do nowego projektu -->
+			header('Location: project.php?id='.$id);
 		}
 	}
 		else

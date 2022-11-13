@@ -54,6 +54,7 @@ if (!isset ($_POST['rejstatus']))
 												<input type="text" placeholder="Nazwisko" name="nazwisko" required>
 											</div>
 											<div class="form-element">
+												Obrazki tylko w formacie PNG
 												<input name="img" type="file" name="img">
 											</div>
 											<div class="form-element">

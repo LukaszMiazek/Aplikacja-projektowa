@@ -34,19 +34,40 @@
 		
 		echo "Zalogowany: ".$log->login;
 		
+		if(file_exists('Profil/'.$log->id.'.png'))
+		{
+			?><img src="Profil/<?php echo $log->id ?>.png" alt=":(" width="42" height="42" style="obrazek"><?php
+		}
+		else 
+		{
+			?><img src="Profil/default.png" alt=":(" width="42" height="42" style="obrazek"><?php
+		}
+		
+		echo '<a href="main.php">Powrót</a>';
+		
 		$id_pro = $_GET['id'];
 		?>
-		<img src="Profil/<?php echo $log->id ?>.png" alt=":(" width="42" height="42" style="obrazek">
 		
 		<form action="index.php" method="post">
 		<input type="hidden" name="wlog"	required>
 		<button type="submit">Wyloguj się</button>
 		</form>	
-	
-		<form action="edit_project.php" method="post">
-			<input type="hidden" name="task" value= <?php echo '"'.$id_pro.'"'; ?>> 
-			<button type="submit">Edytuj projekt</button>                                                    <!--TYLKO DLA WŁAŚCICIELA!-->
-		</form>	
+		
+		<?php 
+			$acc = R::findOne('part', 'id_task = ? AND id_user=? AND role=3', [$id_pro, $_SESSION['user']] );
+			
+
+			
+			if(!empty($acc))
+			{
+		?>
+			<form action="edit_project.php" method="post">
+				<input type="hidden" name="task" value= <?php echo '"'.$id_pro.'"'; ?>> 
+				<button type="submit">Edytuj projekt</button>
+			</form>	
+		<?php 
+			}
+		?>
 		
 		<?php 
 			$us = R::findOne('task', 'id = ?', [$id_pro] );

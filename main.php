@@ -18,9 +18,17 @@
 		
 		$log = R::findOne('user', 'id = ? ', [$_SESSION['user']]);
 		
-		echo "Zalogowany: ".$log->login
+		echo "Zalogowany: ".$log->login;
+		
+		if(file_exists('Profil/'.$log->id.'.png'))
+		{
+			?><img src="Profil/<?php echo $log->id ?>.png" alt=":(" width="42" height="42" style="obrazek"><?php
+		}
+		else 
+		{
+			?><img src="Profil/default.png" alt=":(" width="42" height="42" style="obrazek"><?php
+		}
 		?>
-		<img src="Profil/<?php echo $log->id ?>.png" alt=":(" width="42" height="42" style="obrazek">
 		
 		<form action="index.php" method="post">
 		<input type="hidden" name="wlog"	required>

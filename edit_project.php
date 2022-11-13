@@ -13,7 +13,35 @@
 	require 'rb-mysql.php';
 	R::setup( 'mysql:host=localhost;dbname=tasks','root', '' );
 	
-
+	if (isset ($_POST['uzytkownik']))
+	{
+			$log = R::findOne('user', 'login = ? ', [$_POST ['uzytkownik']]);
+			
+			$rol = R::findOne('part', 'id_user = ? AND id_task = ?', [ $log['id'], $_POST['task_id'] ]);
+			
+			if(empty($rol))
+			{
+				$par = R::dispense('part');
+				$par->id_user=$log['id'];
+				$par->id_task=$_POST['task_id'];
+				$par->role=3;;
+				$id = R::store( $par );
+			}
+			else
+			{
+				$zm = R::load( 'part', $rol['id'] );
+				$zm->role = 3;
+				R::store( $zm );
+			}
+			
+			$rol = R::findOne('part', 'id_user = ? AND id_task = ? ', [ $_SESSION['user'] , $_POST['task_id'] ]);
+			
+			$zm = R::load( 'part', $rol['id'] );
+			$zm->role = 2;
+			R::store( $zm );
+		
+			header('Location: main.php');
+	}
 	if (isset ($_POST['nazwa']))
 	{
 		$zm = R::load( 'task', $_POST['task'] );
@@ -33,6 +61,15 @@
 		$log = R::findOne('user', 'id = ? ', [$_SESSION['user']]);
 		echo "Zalogowny:  ".$log->login;
 		
+		if(file_exists('Profil/'.$log->id.'.png'))
+		{
+			?><img src="Profil/<?php echo $log->id ?>.png" alt=":(" width="42" height="42" style="obrazek"><?php
+		}
+		else 
+		{
+			?><img src="Profil/default.png" alt=":(" width="42" height="42" style="obrazek"><?php
+		}
+		
 		$tas = R::findOne('task', 'id = ? ', [$_POST['task']]);
 		
 		?>
@@ -44,21 +81,26 @@
 		<a href="main.php">Powrót</a>
 		<br>
 		
-		<?php echo $tas->nazwa ?>
  		<form action="edit_project.php" method="post">
-		<input type="text" placeholder="Nazwa" name="nazwa" required>
+		<input type="text" value="<?php echo $tas->nazwa ?>" name="nazwa" required>
 		<input type="hidden" name="task" value= <?php echo '"'.$id_pro.'"'; ?>> 
 		<button type="submit" name="submit">Zmień</button>
 		</form>
 		
-		<?php echo $tas->opis ?><!-- wrzycić to od razu do pola do edycji-->
 		<form action="edit_project.php" method="post">
-		<input type="text" placeholder="opis" name="opis" required>
+		<textarea name="opis" required ><?php echo $tas->opis ?></textarea>
 		<input type="hidden" name="task" value= <?php echo '"'.$id_pro.'"'; ?>> 
 		<button type="submit" name="submit">Zmień</button>
 		</form>
+		
+		Zmiana właściciela projektu
+		<form action="" method="post">
+		<input type="text" name="uzytkownik" required>
+		<input type="hidden" name="task_id" value= <?php echo '"'.$id_pro.'"'; ?>> 
+		<button type="submit">Dodaj</button>
+		</form>	
+		
 		<?php
-		//dodać przekazanie właściciela
 	}
 	else
 	{

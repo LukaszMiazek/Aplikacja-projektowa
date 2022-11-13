@@ -70,11 +70,21 @@
 		
 		<a href="main.php">Powrót</a>
 		
-		<img src="Profil/<?php echo $log->id ?>.png" alt=":(" width="42" height="42" style="obrazek">
+		<?php
+		if(file_exists('Profil/'.$log->id.'.png'))
+		{
+			?><img src="Profil/<?php echo $log->id ?>.png" alt=":(" width="42" height="42" style="obrazek"><?php
+		}
+		else 
+		{
+			?><img src="Profil/default.png" alt=":(" width="42" height="42" style="obrazek"><?php
+		}
+		?>
 		
+		Obrazki tylko w formacie PNG
 		<form action="edit.php" method="post" enctype='multipart/form-data'>
 		<input name="img" type="file" required>
-		<button type="submitimg" name="submit">Zmień</button>
+		<button type="submit" name="submitimg">Zmień</button>
 		</form>
 		
 		<?php echo $log->login ?>
