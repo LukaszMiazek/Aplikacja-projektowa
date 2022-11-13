@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 12 Lis 2022, 18:40
+-- Czas generowania: 13 Lis 2022, 17:33
 -- Wersja serwera: 10.4.8-MariaDB
 -- Wersja PHP: 7.1.32
 
@@ -40,8 +40,9 @@ CREATE TABLE `part` (
 --
 
 INSERT INTO `part` (`id`, `id_user`, `id_task`, `role`) VALUES
-(2, 15, 3, 3),
-(3, 16, 3, 1);
+(2, 15, 3, 2),
+(3, 16, 3, 2),
+(7, 17, 3, 3);
 
 -- --------------------------------------------------------
 
@@ -61,7 +62,7 @@ CREATE TABLE `task` (
 --
 
 INSERT INTO `task` (`id`, `nazwa`, `opis`, `wlasciciel`) VALUES
-(3, 'pro2', 'bbb', 15);
+(3, 'pro2', 'aba', 15);
 
 -- --------------------------------------------------------
 
@@ -84,7 +85,8 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id`, `login`, `haslo`, `imie`, `nazwisko`, `opis`) VALUES
 (15, 'user1', 'haslo1', 'tomek', 'ryba', 'bbb'),
-(16, 'user2', 'haslo2', 'hubert', 'lama', NULL);
+(16, 'user2', 'haslo2', 'hubert', 'lama', NULL),
+(17, 'user3', 'haslo3', 'ewa', 'jabłko', NULL);
 
 --
 -- Indeksy dla zrzutów tabel
@@ -116,7 +118,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT dla tabeli `part`
 --
 ALTER TABLE `part`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT dla tabeli `task`
@@ -128,7 +130,7 @@ ALTER TABLE `task`
 -- AUTO_INCREMENT dla tabeli `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
