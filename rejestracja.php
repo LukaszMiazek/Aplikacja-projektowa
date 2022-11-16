@@ -5,7 +5,87 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Rejestracja</title>
 	<link rel="stylesheet" type="text/css" href="style.css"> 
+	
+<style>	
+
+body {font-family: Arial, Helvetica, sans-serif;}
+
+input{
+	padding: 10px;
+	width:20%;
+
+}
+
+.form-element{
+  padding: 2px;
+  text-align: center;
+
+}
+.link{
+	  text-align: center;
+}
+a:link, a:visited {
+  font-size:12px;
+  background-color: #f44336;
+  color: white;
+  padding: 14px 0px;
+  width: 20%;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 15px;
+  
+}
+
+a:hover, a:active {
+  background-color: red;
+}
+
+.button{
+	text-align: center;
+}
+
+
+button {
+	font-size:12px;
+  background-color: #04AA6D;
+  color: white;
+  padding: 14px 0px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 20%;
+  border-radius: 15px;
+  text-align: center;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+.center{
+  margin: auto;
+  width: 50%;
+  padding: 200px;
+}
+input[type="file"] {
+    display: none;
+}
+.plik {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+	
+	
+}
+
+	
+</style>	
 </head>
+	
+</head>
+
 <?php
 session_start();
 	
@@ -35,6 +115,7 @@ mysqli_query($conn, "SET collation_connection = utf8_polish_ci");
 if (!isset ($_POST['rejstatus']))
 {	
 	?>
+		<div class="center">
 		<div class="form">
 			<div class="tab-content">
 
@@ -42,21 +123,29 @@ if (!isset ($_POST['rejstatus']))
 						<form action="rejestracja.php" method="post" enctype='multipart/form-data'>
 							
 											<div class="form-element">
+												<label for="login"><b>Login</b></label><br>
 												<input type="text" placeholder="Login" name="login" required>
 											</div>
 											<div class="form-element">
+											<label for="login"><b>Hasło</b></label><br>
 												<input type="password" placeholder="Hasło" name="haslo"	required>
 											</div>
 											<div class="form-element">
+											<label for="login"><b>Imie</b></label><br>
 												<input type="text" placeholder="Imię" name="imie" required>
 											</div>
 											<div class="form-element">
+											<label for="login"><b>Nazwisko</b></label><br>
 												<input type="text" placeholder="Nazwisko" name="nazwisko" required>
 											</div>
-											<div class="form-element">
-												Obrazki tylko w formacie PNG
-												<input name="img" type="file" name="img">
+											<div class ="form-element">
+											<label for="img" class="plik">
+												Załadować PNG
+																					</label>
+												<input id='img' name="img" type="file"/>
 											</div>
+												
+											
 											<div class="form-element">
 												<button type="submit" value="Utwórz konto" name="submit">Utwórz konto</button>
 											</div>
@@ -65,6 +154,7 @@ if (!isset ($_POST['rejstatus']))
 					</div>
 
 			</div>
+		</div>
 		</div>
 	<?php
 }
