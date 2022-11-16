@@ -117,7 +117,7 @@ else
 {
 ?>
 <div class="center">
-<form action="/action_page.php" method="post">
+<form action="index.php" method="post">
   <div class="imgcontainer">
     <img src="1.png" alt="Avatar" class="avatar">
   </div>  
@@ -140,7 +140,7 @@ else
                             <button type="submit">Zaloguj</button>
                    </div>
 						<div class="link">
-							<a href=rejestracja.php target="_blank">Utwórz konto</a>
+							<a href="rejestracja.php" > Utwórz konto</a>
                    </div>
                 </form>
 				</div>
