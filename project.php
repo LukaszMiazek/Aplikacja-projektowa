@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>projekt</title>
     <link rel="stylesheet" href="style.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"/>
 </head>
@@ -156,10 +156,35 @@
 				</form>	
 			<?php
 			}
-			?>
-				
-			<?php
 		}
+		
+		if( $access > 1)
+		{
+		?>
+		<form action="new_job.php" method="post">
+		<input type="hidden" name="task_id" value= <?php echo '"'.$id_pro.'"'; ?>> 
+		<button type="submit">Dodaj nowe zadanie</button>
+		</form>	
+		<?php
+		}
+		
+		$job = R::find('job', ' task = ? ', [$id_pro] );
+		
+		foreach ($job as $jb)
+		{
+			$ass = R::findOne('assignment', 'id_job = ? AND id_user = ?', [$jb->id, $_SESSION['user']] );
+			
+			if($jb->id == $ass['id_job'])
+			{
+				echo '<br>';
+				echo '<a href="job.php?id=';
+				echo $jb->id;
+				echo '">';
+				echo $jb['nazwa'];
+				echo '</a>';
+			}
+		}
+
 	}
 	else
 	{

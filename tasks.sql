@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 13 Lis 2022, 19:51
+-- Czas generowania: 20 Lis 2022, 14:54
 -- Wersja serwera: 10.4.8-MariaDB
 -- Wersja PHP: 7.1.32
 
@@ -21,6 +21,52 @@ SET time_zone = "+00:00";
 --
 -- Baza danych: `tasks`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `assignment`
+--
+
+CREATE TABLE `assignment` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `id_user` int(11) UNSIGNED DEFAULT NULL,
+  `id_job` int(11) UNSIGNED DEFAULT NULL,
+  `rola` int(11) UNSIGNED DEFAULT NULL,
+  `status` tinyint(1) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Zrzut danych tabeli `assignment`
+--
+
+INSERT INTO `assignment` (`id`, `id_user`, `id_job`, `rola`, `status`) VALUES
+(1, 15, 1, 1, 0),
+(3, 17, 1, 2, 1),
+(5, 15, 3, 1, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `job`
+--
+
+CREATE TABLE `job` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `nazwa` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `tresc` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `termin` date DEFAULT NULL,
+  `task` int(11) UNSIGNED DEFAULT NULL,
+  `tworca` int(11) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Zrzut danych tabeli `job`
+--
+
+INSERT INTO `job` (`id`, `nazwa`, `tresc`, `termin`, `task`, `tworca`) VALUES
+(1, 'test', 'aaa', '2022-11-26', 3, 15),
+(3, 'test2', 'bbb', '2022-12-04', 3, 15);
 
 -- --------------------------------------------------------
 
@@ -105,11 +151,25 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`id`, `login`, `haslo`, `imie`, `nazwisko`) VALUES
 (15, 'user1', 'haslo1', 'tomek', 'ryba'),
 (16, 'user2', 'haslo2', 'hubert', 'lama'),
-(17, 'user3', 'haslo3', 'ewa', 'jabłko');
+(17, 'user3', 'haslo3', 'ewa', 'jabłko'),
+(18, 'user4', 'haslo4', 'Piotr', 'Nowak'),
+(19, 'user5', 'haslo5', 'Piotr', 'Danielowski');
 
 --
 -- Indeksy dla zrzutów tabel
 --
+
+--
+-- Indeksy dla tabeli `assignment`
+--
+ALTER TABLE `assignment`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeksy dla tabeli `job`
+--
+ALTER TABLE `job`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indeksy dla tabeli `part`
@@ -140,10 +200,22 @@ ALTER TABLE `user`
 --
 
 --
+-- AUTO_INCREMENT dla tabeli `assignment`
+--
+ALTER TABLE `assignment`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT dla tabeli `job`
+--
+ALTER TABLE `job`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT dla tabeli `part`
 --
 ALTER TABLE `part`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT dla tabeli `role_names`
@@ -155,13 +227,13 @@ ALTER TABLE `role_names`
 -- AUTO_INCREMENT dla tabeli `task`
 --
 ALTER TABLE `task`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT dla tabeli `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
