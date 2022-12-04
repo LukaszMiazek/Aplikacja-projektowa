@@ -125,6 +125,7 @@
 			 print_r($errors);
 			 }
 			}
+			header('Location: project.php?id='.$tid);
 		}
 	}
 		else

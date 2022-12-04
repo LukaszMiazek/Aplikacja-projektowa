@@ -13,6 +13,52 @@
 	require 'rb-mysql.php';
 	R::setup( 'mysql:host=localhost;dbname=tasks','root', '' );
 	
+	function delete_directory($dirname) {
+ 
+    if(!file_exists($dirname))
+        return false;
+	
+    if (is_dir($dirname))
+         $dir_handle = opendir($dirname);
+ 
+    if (!$dir_handle)
+         return false;
+ 
+    while($file = readdir($dir_handle)) {
+ 
+        if ($file != '.' && $file != '..') {
+            if (!is_dir($dirname."/".$file))
+                unlink($dirname."/".$file);
+            else
+                delete_directory($dirname.'/'.$file);          
+        }
+    }
+    closedir($dir_handle);
+    rmdir($dirname);
+ 
+    return true;
+	}
+	
+	if (isset ($_POST['task_delete']))
+	{
+		$jb = R::findOne('task', 'id = ?', [$_POST['task_delete']] );
+		$part = R::find('part', ' id_task= ? ', [$_POST['task_delete']] );
+		
+		$jobs = R::find('job', ' task = ? ', [$_POST['task_delete']] );
+		foreach ($jobs as $job)
+		{
+			$ass = R::find('assignment', ' id_job = ? ', [ $job->id ] );
+			R::trashAll( $ass );
+			
+			delete_directory("Pliki/".$job->id);
+		}
+		
+		R::trashAll( $jobs );
+		R::trashAll( $part );
+		R::trash( $jb );
+		
+		header('Location: main.php');
+	}
 	if (isset ($_POST['user_mod']))
 	{	
 		$mod = R::findOne('part', ' id_user = ? AND id_task = ? ', [ $_POST['user_id'], $_POST['task_id'] ]);
@@ -120,8 +166,18 @@
 		<input type="hidden" name="task_id" value= <?php echo '"'.$id_pro.'"'; ?>> 
 		<button type="submit">Dodaj</button>
 		</form>	
-		
 		<?php
+		if( $access > 2)
+		{
+			?>
+			
+			<form action="" method="post">
+			<input type="hidden" name="task_delete" value= <?php echo '"'.$id_pro.'"'; ?>> 
+			<button type="submit">Usuń projekt</button>
+			</form>	
+			
+			<?php
+		}
 		}
 		
 		$part = R::find('part', ' id_task = ? ', [$id_pro] );

@@ -15,6 +15,55 @@
 	
 	$jid=$_GET['id'];
 	
+	function delete_directory($dirname) {
+ 
+    if(!file_exists($dirname))
+        return false;
+	
+    if (is_dir($dirname))
+         $dir_handle = opendir($dirname);
+ 
+    if (!$dir_handle)
+         return false;
+ 
+    while($file = readdir($dir_handle)) {
+ 
+        if ($file != '.' && $file != '..') {
+            if (!is_dir($dirname."/".$file))
+                unlink($dirname."/".$file);
+            else
+                delete_directory($dirname.'/'.$file);          
+        }
+    }
+    closedir($dir_handle);
+    rmdir($dirname);
+ 
+    return true;
+	}
+	
+	if (isset ($_POST['file_delete']))
+	{
+		$del=$_POST['file_delete'];
+		
+		$del = str_replace("_???_space_???_", " " ,$del);
+		
+		unlink($del);
+	}
+	if (isset ($_POST['job_delete']))
+	{	
+		$part = R::find('assignment', ' id_job = ? ', [$_POST['job_delete']] );
+		R::trashAll( $part );
+		
+		$jb = R::findOne('job', 'id = ?', [$_POST['job_delete']] );
+		$back = $jb['task'];
+		R::trash( $jb );
+		
+		$dirname="Pliki/".$_POST['job_delete'];
+		
+		delete_directory("Pliki/".$_POST['job_delete']);
+		
+		header('Location: project.php?id='.$back);
+	}
 	if(isset($_FILES['sub'])){
 			 $errors= array();
 			 $file_name = $_FILES['sub']['name'];
@@ -34,7 +83,12 @@
 			 }  
 			 if(empty($errors)==true){
 
-				mkdir("Pliki/".$jid."/".$_POST['user_id'], 0777);
+				$ndir = "Pliki/".$jid."/".$_POST['user_id'];
+				
+				if ( !is_dir($ndir) )
+				{
+					mkdir($ndir, 0777);
+				}
 				 
 				 foreach($file_name as $key => $value){ 
 					 move_uploaded_file($file_tmp[$key],"Pliki/".$jid."/".$_POST['user_id']."/".$file_name[$key]);
@@ -77,7 +131,9 @@
 			?><img src="Profil/default.png" alt=":(" width="42" height="42" style="obrazek"><?php
 		}
 		
-		echo '<a href="main.php">Powrót</a>';
+		$us = R::findOne('job', 'id = ?', [$jid] );
+		
+		echo '<a href="project.php?id='.$us->task.'">Powrót</a>';
 		
 		$id_pro = $_GET['id'];
 		?>
@@ -88,13 +144,11 @@
 		</form>	
 		
 		<?php 
-			$ass = R::findOne('assignment', 'id = ? AND id_user = ?', [$jid, $_SESSION['user']] );
+			$ass = R::findOne('assignment', 'id_job = ? AND id_user = ?', [$jid, $_SESSION['user']] );
 			
 			if($ass['rola']==1) $access=1;
 			else $access=2;
-		?>
 		
-		<?php 
 		if( $access == 1)
 		{
 		?>
@@ -107,11 +161,14 @@
 		<button type="submit">Dodaj</button>
 		</form>	
 		
+		<form action="" method="post">
+		<input type="hidden" name="task_id" value= <?php echo '"'.$jid.'"'; ?>> 
+		<input type="hidden" name="job_delete" value= <?php echo '"'.$jid.'"'; ?>> 
+		<button type="submit" >Usuń zadanie</button>
+		</form>	
+		
 		<?php
 		}
-		
-		$us = R::findOne('job', 'id = ?', [$jid] );
-			
 			echo $us['nazwa'];
 			echo '<br>Tresc:<br>';
 			echo $us['tresc'];
@@ -207,6 +264,17 @@
 					echo 'download="'.$plik.'">';
 					echo $plik.'<br>';
 					echo '</a>';
+					
+					$file='Pliki/'.$jid.'/'.$_SESSION['user'].'/'.$plik;
+					
+					$file = str_replace(" ", "_???_space_???_", $file);
+					
+					?>
+						<form action="" method="post">
+						<input type="hidden" name="file_delete" value= <?php echo $file; ?>> 
+						<input type="submit" name='submit' value="Usuń" target="self">
+						</form>
+					<?php
 				}
 			}
 		}
