@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <title>zadanie</title>
-    <link rel="stylesheet" href="style.css"/>
+    <link rel="stylesheet" href="main_style.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"/>
 </head>
 <body>
@@ -114,34 +114,34 @@
 			$par->status=1;
 			$id = R::store( $par );
 	}
+	?>
+	<div class="banner">
+	<?php
 	if (isset ($_SESSION['user']))
 	{
 		
 		$log = R::findOne('user', 'id = ? ', [$_SESSION['user']]);
-		
-		echo "Zalogowany: ".$log->login;
-		
-		
-		if(file_exists('Profil/'.$log->id.'.png'))
-		{
-			?><img src="Profil/<?php echo $log->id ?>.png" alt=":(" width="42" height="42" style="obrazek"><?php
-		}
-		else 
-		{
-			?><img src="Profil/default.png" alt=":(" width="42" height="42" style="obrazek"><?php
-		}
-		
 		$us = R::findOne('job', 'id = ?', [$jid] );
-		
-		echo '<a href="project.php?id='.$us->task.'">Powrót</a>';
-		
-		$id_pro = $_GET['id'];
-		?>
-		
-		<form action="index.php" method="post">
-		<input type="hidden" name="wlog"	required>
-		<button type="submit">Wyloguj się</button>
-		</form>	
+		echo "$log->imie $log->nazwisko";
+			?>	
+		<ul>
+			<li><a href="index.php">Wyloguj się</a></li>
+			<li><a href="<?php echo "project.php?id='.$us->task.'"?>">Powrót</a></li>
+		</ul>
+		</div>	
+			<div class = "center">
+	<?php
+		if(file_exists('Profil/'.$log->id.'.png'))
+			{
+				?>
+				<div class="imgcontainer"><img src="Profil/<?php echo $log->id ?>.png" alt=":(" width="100" height="100" class="obrazek"></div><?php
+			}
+			else 
+			{
+				?><div class="imgcontainer"><img src="Profil/default.png" alt=":(" width="100" height="100" class="obrazek"></div><?php
+			}
+			//$id_pro = $_GET['id'];
+	?>
 		
 		<?php 
 			$ass = R::findOne('assignment', 'id_job = ? AND id_user = ?', [$jid, $_SESSION['user']] );
@@ -280,12 +280,17 @@
 		}
 	}
 	else
-	{
+	{	
 		?>
+		<div class="banner">
 		MUSISZ SIĘ ZALOGOWAĆ!
-		<a href="index.php">Powrót</a>
+		<ul>
+			<li><a href="index.php">Powrót</a></li></ul>
+		</div>
 		<?php
+		
 	}
 ?>
+</div>
 </body>
 </html>

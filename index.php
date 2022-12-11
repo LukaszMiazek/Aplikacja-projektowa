@@ -4,79 +4,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <title>Login</title>
-    <link rel="stylesheet" href="style.css"/>
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"/>
-<style>	
-
-body {font-family: Arial, Helvetica, sans-serif;}
-
-input{
-	padding: 10px;
-	width:20%;
-}
-
-.center{
-  margin: auto;
-  width: 50%;
-  padding: 150px;
-}
-
-.imgcontainer {
-  text-align: center;
-}	
-
-img.avatar{
-  width: 15%;
-  border-radius: 20%;
-}
-
-.form-element{
-  padding: 16px;
-  text-align: center;
-}
-.link{
-	  text-align: center;
-}
-a:link, a:visited {
-  font-size:12px;
-  background-color: #f44336;
-  color: white;
-  padding: 14px 0px;
-  width: 20%;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  border-radius: 15px;
-  
-}
-
-a:hover, a:active {
-  background-color: red;
-}
-
-.button{
-	text-align: center;
-}
-
-
-button {
-	font-size:12px;
-  background-color: #04AA6D;
-  color: white;
-  padding: 14px 0px;
-  margin: 8px 0;
-  border: none;
-  cursor: pointer;
-  width: 20%;
-  border-radius: 15px;
-  text-align: center;
-}
-
-button:hover {
-  opacity: 0.8;
-}
 	
-</style>	
 </head>
 <body>  
 <?php

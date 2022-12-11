@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <title>edycja</title>
-    <link rel="stylesheet" href="style.css"/>
+    <link rel="stylesheet" href="main_style.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"/>
 </head>
 <body>
@@ -56,38 +56,38 @@
 		$zm = R::load( 'user', $_SESSION['user'] );
 		$zm->nazwisko = $_POST['nazwisko'];
 		R::store( $zm ); 
+		R::store( $zm ); 
+		R::store( $zm ); 
 	}
+	?>
+	<div class="banner">
+	<?php	
 	if (isset ($_SESSION['user']))
 	{
 		$log = R::findOne('user', 'id = ? ', [$_SESSION['user']]);
+	
+		echo "$log->imie $log->nazwisko";
+			?>	
+		<ul>
+			<li><a href="index.php">Wyloguj się</a></li>
+			<li><a href="main.php">Powrót</a></li>
+		</ul>
+		</div>
 		
-		echo "Zalogowny:  ".$log->login
-		?>
-		<form action="index.php" method="post">
-		<input type="hidden" name="wlog"	required>
-		<button type="submit">Wyloguj się</button>
-		</form>	
-		
-		<a href="main.php">Powrót</a>
-		
+		<div class = "center">
 		<?php
 		if(file_exists('Profil/'.$log->id.'.png'))
-		{
-			?><img src="Profil/<?php echo $log->id ?>.png" alt=":(" width="42" height="42" style="obrazek"><?php
-		}
-		else 
-		{
-			?><img src="Profil/default.png" alt=":(" width="42" height="42" style="obrazek"><?php
-		}
-		?>
-		
-		Obrazki tylko w formacie PNG
-		<form action="edit.php" method="post" enctype='multipart/form-data'>
-		<input name="img" type="file" required>
-		<button type="submit" name="submitimg">Zmień</button>
-		</form>
-		
-		<?php echo $log->login ?>
+			{
+				?>
+				<div class="imgcontainer"><img src="Profil/<?php echo $log->id ?>.png" alt=":(" width="100" height="100" class="obrazek"></div><?php
+			}
+			else 
+			{
+				?><div class="imgcontainer"><img src="Profil/default.png" alt=":(" width="100" height="100" class="obrazek"></div><?php
+			}
+			?>
+		<br><br>
+		<div class="form-element">
  		<form action="edit.php" method="post">
 		<input type="text" placeholder="Login" name="login" required>
 		<button type="submit" name="submit">Zmień</button>
@@ -100,17 +100,24 @@
 		<button type="submit" name="submit">Zmień</button>
 		</form>
 		
-		<?php echo $log->imie ?>
+		
 		<form action="edit.php" method="post">
 		<input type="text" placeholder="Imię" name="imie" required>
 		<button type="submit" name="submit">Zmień</button>
 		</form>
 		
-		<?php echo $log->nazwisko ?>
+		
 		<form action="edit.php" method="post">
 		<input type="text" placeholder="Nazwisko" name="nazwisko" required>
 		<button type="submit" name="submit">Zmień</button>
 		</form>
+		
+		Obrazek (PNG)
+		<form action="edit.php" method="post" enctype='multipart/form-data'>
+		<input name="img" type="file" required>
+		<button type="submit" name="submitimg">Zmień</button>
+		</form>
+		</div>
 		<?php
 	}
 	else
@@ -120,7 +127,7 @@
 		<a href="index.php">Powrót</a>
 		<?php
 	}
-	
-?>
+	?>
+</div>
 </body>
 </html>

@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <title>edycja</title>
-    <link rel="stylesheet" href="style.css"/>
+    <link rel="stylesheet" href="main_style.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"/>
 </head>
 <body>
@@ -68,35 +68,36 @@
 		$zm->opis = $_POST['opis'];
 		R::store( $zm ); 
 	}
+	?>
+		<div class="banner">
+	<?php
 	if (isset ($_SESSION['user']))
 	{
 		$id_pro = $_POST['task'];
-		
 		$log = R::findOne('user', 'id = ? ', [$_SESSION['user']]);
-		echo "Zalogowny:  ".$log->login;
-		
-		if(file_exists('Profil/'.$log->id.'.png'))
-		{
-			?><img src="Profil/<?php echo $log->id ?>.png" alt=":(" width="42" height="42" style="obrazek"><?php
-		}
-		else 
-		{
-			?><img src="Profil/default.png" alt=":(" width="42" height="42" style="obrazek"><?php
-		}
-		
-		
 		$tas = R::findOne('task', 'id = ? ', [$_POST['task']]);
-		
-		?>
-		<form action="index.php" method="post">
-		<input type="hidden" name="wlog"	required>
-		<button type="submit">Wyloguj się</button>
-		</form>	
-		<br>
-		
-		<?php
-		echo '<a href="project.php?id='.$id_pro.'">Powrót</a>';
-		?>
+		echo "$log->imie $log->nazwisko";
+			?>	
+		<ul>
+			<li><a href="index.php">Wyloguj się</a></li>
+			<li><a href="<?php echo "project.php?id='.$tas->task.'"?>">Powrót</a></li>
+		</ul>
+		</div>	
+			<div class = "center">
+	<?php
+		if(file_exists('Profil/'.$log->id.'.png'))
+			{
+				?>
+				<div class="imgcontainer"><img src="Profil/<?php echo $log->id ?>.png" alt=":(" width="100" height="100" class="obrazek"></div><?php
+			}
+			else 
+			{
+				?><div class="imgcontainer"><img src="Profil/default.png" alt=":(" width="100" height="100" class="obrazek"></div><?php
+			}
+			//$id_pro = $_GET['id'];
+	?>
+
+
 		
  		<form action="edit_project.php" method="post">
 		<input type="text" value="<?php echo $tas->nazwa ?>" name="nazwa" required>

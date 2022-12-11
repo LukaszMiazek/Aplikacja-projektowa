@@ -4,10 +4,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <title>nowy</title>
-    <link rel="stylesheet" href="style.css"/>
+    <link rel="stylesheet" href="main_style.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"/>
 </head>
 <body>
+<div class="banner">
 <?php
 	session_start();	
 	require 'rb-mysql.php';
@@ -17,28 +18,28 @@
 	{
 		$tid=$_POST['task_id'];
 		$sid = strval($tid);
-		
 		$log = R::findOne('user', 'id = ? ', [$_SESSION['user']]);
 		
-		echo "Zalogowany: ".$log->login;
-		
+		echo "$log->imie $log->nazwisko";
+			?>	
+		<ul>
+			<li><a href="index.php">Wyloguj się</a></li>
+			<li><a href="main.">Powrót</a></li>
+		</ul>
+		</div>	
+			<div class = "center">
+	<?php
 		if(file_exists('Profil/'.$log->id.'.png'))
-		{
-			?><img src="Profil/<?php echo $log->id ?>.png" alt=":(" width="42" height="42" style="obrazek"><?php
-		}
-		else 
-		{
-			?><img src="Profil/default.png" alt=":(" width="42" height="42" style="obrazek"><?php
-		}
-		?>
-		
-		<form action="index.php" method="post">
-		<input type="hidden" name="wlog"	required>
-		<button type="submit">Wyloguj się</button>
-		</form>	
-		
-		<a href="main.php">Powrót</a>
-		
+			{
+				?>
+				<div class="imgcontainer"><img src="Profil/<?php echo $log->id ?>.png" alt=":(" width="100" height="100" class="obrazek"></div><?php
+			}
+			else 
+			{
+				?><div class="imgcontainer"><img src="Profil/default.png" alt=":(" width="100" height="100" class="obrazek"></div><?php
+			}
+			//$id_pro = $_GET['id'];
+	?>
 		<?php
 		if (!isset ($_POST['nazwa']))
 		{	
