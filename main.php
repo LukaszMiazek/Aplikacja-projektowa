@@ -63,6 +63,12 @@
 				echo $na->nazwa;
 				echo '</a></li>';
 			}
+			
+			$part = R::find('notification', ' id_user = ? ', [$_SESSION['user']] );
+			foreach ($part as $pro)
+			{
+				echo $pro->tresc.'<br>';
+			}
 	}
 		else
 		{

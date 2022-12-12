@@ -13,6 +13,8 @@
 	require 'rb-mysql.php';
 	R::setup( 'mysql:host=localhost;dbname=tasks','root', '' );
 	
+	require 'notification.php';
+	
 	function delete_directory($dirname) {
  
     if(!file_exists($dirname))
@@ -86,17 +88,24 @@
 	}
 	if (isset ($_POST['uzytkownik']))
 	{
-			$log = R::findOne('user', 'login = ? ', [$_POST ['uzytkownik']]);
+			$check = R::findOne('part', 'id_user = ? AND id_task = ?', [ $_POST['uzytkownik'],$_POST ['task_id'] ]);
 		
-			$uz=$log->id;
-			$ro=$_POST ['rola'];
-			$id_t=$_POST ['task_id'];
+			if(!empty($check))
+			{
+				$log = R::findOne('user', 'login = ? ', [$_POST ['uzytkownik']]);
+				
+				$uz=$log->id;
+				$ro=$_POST ['rola'];
+				$id_t=$_POST ['task_id'];
 
-			$par = R::dispense('part');
-			$par->id_user=$uz;
-			$par->id_task=$id_t;
-			$par->role=$ro;
-			$id = R::store( $par );
+				$par = R::dispense('part');
+				$par->id_user=$uz;
+				$par->id_task=$id_t;
+				$par->role=$ro;
+				$id = R::store( $par );
+				
+				notification(1,$uz,$_SESSION['user'],$id_t,NULL);
+			}
 	}?>
 	
 	

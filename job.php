@@ -13,6 +13,8 @@
 	require 'rb-mysql.php';
 	R::setup( 'mysql:host=localhost;dbname=tasks','root', '' );
 	
+	require 'notification.php';
+	
 	$jid=$_GET['id'];
 	
 	function delete_directory($dirname) {
@@ -41,6 +43,25 @@
     return true;
 	}
 	
+	if (isset ($_POST['correct']))
+	{	
+		$find = R::findOne('assignment', ' id_user = ? AND id_job = ? ', [ $_POST['user_id'], $jid ]);
+		$load = R::load('assignment',$find['id']);
+		$load->status = 2;
+		R::store( $load );
+	}
+	if (isset ($_POST['end']))
+	{	
+		$find = R::findOne('assignment', ' id_user = ? AND id_job = ? ', [ $_POST['user_id'], $jid ]);
+		$load = R::load('assignment',$find['id']);
+		$load->status = 1;
+		R::store( $load );
+		
+		$jb = R::findOne('job', 'id = ?', [$jid] );
+		
+		if($_POST['corr']==1) notification(6,$jb['tworca'],$_SESSION['user'],$jb['task'],$jid);
+		else notification(4,$jb['tworca'],$_SESSION['user'],$jb['task'],$jid);
+	}
 	if (isset ($_POST['file_delete']))
 	{
 		$del=$_POST['file_delete'];
@@ -113,6 +134,9 @@
 			$par->rola=2;
 			$par->status=1;
 			$id = R::store( $par );
+			
+			$job = R::findOne('job', 'id = ? ', [$jid]);
+			notification(2,$uz,$_SESSION['user'],$job['task'],$jid);
 	}
 	?>
 	<div class="banner">
@@ -126,7 +150,7 @@
 			?>	
 		<ul>
 			<li><a href="index.php">Wyloguj się</a></li>
-			<li><a href="<?php echo "project.php?id='.$us->task.'"?>">Powrót</a></li>
+			<li><a href="<?php echo "project.php?id=".$us['task']?>">Powrót</a></li>
 		</ul>
 		</div>	
 			<div class = "center">
@@ -204,6 +228,8 @@
 			
 			echo '<br>'.$us['login'];
 			
+			if($usr->status == 1) echo " (Zakończono)";
+			
 			if( $access==1 && $us['id'] != $_SESSION['user'])
 			{
 			?>
@@ -237,6 +263,9 @@
 			
 			echo '<br>';
 		}
+		
+		if($ass['status']==0 || $ass['status']==2)
+		{
 		?>
 		<br>
 		Wyślij Pliki
@@ -277,6 +306,39 @@
 					<?php
 				}
 			}
+		}
+		if($ass['status']==0)
+		{
+		?>
+		Powiadom o ukończeniu zadania
+		<form action="" method="post">
+			<input type="hidden" name="user_id" value= <?php echo '"'.$_SESSION['user'].'"'; ?>> 
+			<input type="hidden" name="corr" value=0> 
+			<input type="submit" name='end' value="Zakońćz" target="self">
+		</form>
+		<?php
+		}
+		else if($ass['status']==2)
+		{
+		?>
+		Powiadom o poprawkach
+		<form action="" method="post">
+			<input type="hidden" name="user_id" value= <?php echo '"'.$_SESSION['user'].'"'; ?>>
+			<input type="hidden" name="corr" value=1> 
+			<input type="submit" name='end' value="Popraw" target="self">
+		</form>
+		<?php
+		}
+		}
+		else
+		{
+			echo "Zadanie ukończone!";
+			?>
+			<form action="" method="post">
+			<input type="hidden" name="user_id" value= <?php echo '"'.$_SESSION['user'].'"'; ?>> 
+			<input type="submit" name='correct' value="Popraw" target="self">
+			</form>
+			<?php
 		}
 	}
 	else
