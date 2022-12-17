@@ -13,8 +13,6 @@
 	require 'rb-mysql.php';
 	R::setup( 'mysql:host=localhost;dbname=tasks','root', '' );
 	
-	require 'notification.php';
-	
 	$jid=$_GET['id'];
 	
 	function delete_directory($dirname) {
@@ -43,31 +41,6 @@
     return true;
 	}
 	
-	if (isset ($_POST['deadline']))
-	{
-		$load = R::load('job', $_POST['job_id'] );
-		$load->termin = $_POST['deadline'];
-		R::store( $load );
-	}
-	if (isset ($_POST['correct']))
-	{	
-		$find = R::findOne('assignment', ' id_user = ? AND id_job = ? ', [ $_POST['user_id'], $jid ]);
-		$load = R::load('assignment',$find['id']);
-		$load->status = 3;
-		R::store( $load );
-	}
-	if (isset ($_POST['end']))
-	{	
-		$find = R::findOne('assignment', ' id_user = ? AND id_job = ? ', [ $_POST['user_id'], $jid ]);
-		$load = R::load('assignment',$find['id']);
-		$load->status = 2;
-		R::store( $load );
-		
-		$jb = R::findOne('job', 'id = ?', [$jid] );
-		
-		if($_POST['corr']==1) notification(6,$jb['tworca'],$_SESSION['user'],$jb['task'],$jid);
-		else notification(4,$jb['tworca'],$_SESSION['user'],$jb['task'],$jid);
-	}
 	if (isset ($_POST['file_delete']))
 	{
 		$del=$_POST['file_delete'];
@@ -140,9 +113,6 @@
 			$par->rola=2;
 			$par->status=1;
 			$id = R::store( $par );
-			
-			$job = R::findOne('job', 'id = ? ', [$jid]);
-			notification(2,$uz,$_SESSION['user'],$job['task'],$jid);
 	}
 	?>
 	<div class="banner">
@@ -156,7 +126,7 @@
 			?>	
 		<ul>
 			<li><a href="index.php">Wyloguj się</a></li>
-			<li><a href="<?php echo "project.php?id=".$us['task']?>">Powrót</a></li>
+			<li><a href="<?php echo "project.php?id='.$us->task.'"?>">Powrót</a></li>
 		</ul>
 		</div>	
 			<div class = "center">
@@ -204,16 +174,6 @@
 			echo $us['tresc'];
 			echo '<br>Termin:<br>';
 			echo $us['termin'];
-			if( $access == 1)
-			{
-				?>
-				<form action="" method="post">
-				<input type="hidden" name="job_id" value= <?php echo '"'.$jid.'"'; ?>> 
-				<input type="date" name="deadline">
-				<button type="submit" >Zmień termin</button>
-				</form>	
-				<?php
-			}
 			echo '<br>';
 			echo 'Załączniki';
 			echo '<br>';
@@ -243,8 +203,6 @@
 			$us = R::findOne('user', 'id = ?', [$usr->id_user] );
 			
 			echo '<br>'.$us['login'];
-			
-			if($usr->status == 2) echo " (Zakończono)";
 			
 			if( $access==1 && $us['id'] != $_SESSION['user'])
 			{
@@ -279,60 +237,17 @@
 			
 			echo '<br>';
 		}
+		?>
+		<br>
+		Wyślij Pliki
+		<form action="" method="post" enctype="multipart/form-data">
+			<input type="file" class="custom-file-input"  name="sub[]" multiple="">
+			<input type="hidden" name="user_id" value= <?php echo '"'.$_SESSION['user'].'"'; ?>> 
+			<input type="submit" name='submit' value="Wyślij" target="self">
+		</form>
 		
-		$curr = date("d-m-y h:i:s");
-		if($us['termin'] > $curr)
-		{
-			if($ass['status']==1 || $ass['status']==3)
-			{
-			?>
-			<br>
-			Wyślij Pliki
-			<form action="" method="post" enctype="multipart/form-data">
-				<input type="file" class="custom-file-input"  name="sub[]" multiple="">
-				<input type="hidden" name="user_id" value= <?php echo '"'.$_SESSION['user'].'"'; ?>> 
-				<input type="submit" name='submit' value="Wyślij" target="self">
-			</form>
-			
-			<?php
-			if($ass['status']==1)
-			{
-			?>
-			Powiadom o ukończeniu zadania
-			<form action="" method="post">
-				<input type="hidden" name="user_id" value= <?php echo '"'.$_SESSION['user'].'"'; ?>> 
-				<input type="hidden" name="corr" value=0> 
-				<input type="submit" name='end' value="Zakońćz" target="self">
-			</form>
-			<?php
-			}
-			else if($ass['status']==3)
-			{
-			?>
-			Powiadom o poprawkach
-			<form action="" method="post">
-				<input type="hidden" name="user_id" value= <?php echo '"'.$_SESSION['user'].'"'; ?>>
-				<input type="hidden" name="corr" value=1> 
-				<input type="submit" name='end' value="Popraw" target="self">
-			</form>
-			<?php
-			}
-			}
-			else
-			{
-				echo "Zadanie ukończone!";
-				?>
-				<form action="" method="post">
-				<input type="hidden" name="user_id" value= <?php echo '"'.$_SESSION['user'].'"'; ?>> 
-				<input type="submit" name='correct' value="Popraw" target="self">
-				</form>
-				<?php
-			}
-		}
-		else
-		{
-			echo "Temin zadania minął <br>";
-		}
+		<?php
+		
 		$katalog = 'Pliki/'.$jid.'/'.$_SESSION['user'];
 		if(is_dir($katalog))
 		{

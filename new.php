@@ -41,7 +41,7 @@
 				?><div class="imgcontainer"><img src="Profil/default.png" alt=":(" width="100" height="100" class="obrazek"></div><?php
 			}
 			?>
-		<br><br>
+		<br>
 		<?php
 		if (!isset ($_POST['nazwa']))
 		{	
@@ -92,14 +92,17 @@
 			header('Location: project.php?id='.$ids);
 		}
 	}
-		else
-		{
-			?>
-			MUSISZ SIĘ ZALOGOWAĆ!
-			<a href="index.php">Powrót</a>
-			<?php
-		}
-	?>
-	</div>
+	else
+	{	
+		?>
+		<div class="banner">
+		MUSISZ SIĘ ZALOGOWAĆ!
+		<ul>
+			<li><a href="index.php">Powrót</a></li></ul>
+		</div>
+		<?php
+		
+	}
+?>
 </body>
 </html>
