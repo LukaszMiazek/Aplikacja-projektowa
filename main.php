@@ -13,7 +13,7 @@
 
  <div class="banner">
 <?php
-	session_start();	
+	session_start();
 
 	if (isset ($_SESSION['user']))
 	{
@@ -49,34 +49,40 @@
 			?>
 			
 			<h2>PROJEKTY</h2>
-				
-				 <div class="array_projects"><ul>
+			
 			<?php
 			$part = R::find('part', ' id_user = ? ', [$_SESSION['user']] );
-			
 			foreach ($part as $pro)
 			{
-				$na = R::findOne('task', 'id = ?',[$pro->id_task] );
-				
-				?>
-				
-				<li><a href="project.php?id=<?php echo "$pro->id_task"?>"><?php echo "$na->nazwa"?></a></li>
-				
-				<?php
+				echo '<br>';
+				echo '<li>';
+				$na = R::findOne('task', 'id = ?', [$pro->id_task] );
+				echo '<a href="project.php?id=';
+				echo $pro->id_task;
+				echo '">';
+				echo $na->nazwa;
+				echo '</a></li>';
 			}
 			
+			$part = R::find('notification', ' id_user = ? ', [$_SESSION['user']] );
+			foreach ($part as $pro)
+			{
+				echo $pro->tresc.'<br>';
+			}
 	}
-	else
-	{	
-		?></ul></div>
-		<div class="banner">
-		MUSISZ SIĘ ZALOGOWAĆ!
-		<ul>
-			<li><a href="index.php">Powrót</a></li></ul>
-		</div>
-		<?php
+		else
+		{
 		
-	}
+			?></div>
+		
+			<div class="form-element">
+			<H2>MUSISZ SIĘ ZALOGOWAĆ!</H2>
+			<div class="link">
+			<a href="index.php">Powrót</a>
+			<?php
+	
+			}
+	
 ?>
 </div>
 	</div>

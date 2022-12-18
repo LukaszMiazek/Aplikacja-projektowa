@@ -13,6 +13,8 @@
 	require 'rb-mysql.php';
 	R::setup( 'mysql:host=localhost;dbname=tasks','root', '' );
 	
+	require 'notification.php';
+	
 	function delete_directory($dirname) {
  
     if(!file_exists($dirname))
@@ -88,15 +90,22 @@
 	{
 			$log = R::findOne('user', 'login = ? ', [$_POST ['uzytkownik']]);
 		
-			$uz=$log->id;
-			$ro=$_POST ['rola'];
-			$id_t=$_POST ['task_id'];
+			$check = R::findOne('part', 'id_user = ? AND id_task = ?', [ $log->id, $_POST ['task_id'] ]);
+		
+			if(empty($check))
+			{
+				$uz=$log->id;
+				$ro=$_POST ['rola'];
+				$id_t=$_POST ['task_id'];
 
-			$par = R::dispense('part');
-			$par->id_user=$uz;
-			$par->id_task=$id_t;
-			$par->role=$ro;
-			$id = R::store( $par );
+				$par = R::dispense('part');
+				$par->id_user=$uz;
+				$par->id_task=$id_t;
+				$par->role=$ro;
+				$id = R::store( $par );
+				
+				notification(1,$uz,$_SESSION['user'],$id_t,NULL);
+			}
 	}?>
 	
 	
@@ -164,7 +173,7 @@
 		<br>
 		Dodaj użytkownika
 		<form action="" method="post">
-		<input type="text"  name="uzytkownik" required>
+		<input type="text" name="uzytkownik" required>
 		<select name="rola">
 		  <option value="1">Członek</option>
 		<?php if( $access ==3) { ?><option value="2">Moderator</option><?php } ?>
@@ -227,9 +236,6 @@
 		<input type="hidden" name="task_id" value= <?php echo '"'.$id_pro.'"'; ?>> 
 		<button type="submit">Dodaj nowe zadanie</button>
 		</form>	
-		
-		ZADANIA:
-		 <div class="array_projects"><ul>
 		<?php
 		}
 		
@@ -239,15 +245,21 @@
 		{
 			$ass = R::findOne('assignment', 'id_job = ? AND id_user = ?', [$jb->id, $_SESSION['user']] );
 			
-			?>
-				<li><a href="job.php?id=<?php echo "$jb->id"?>"><?php echo "$jb->nazwa"?></a></li>
-			<?php
-
+			if($jb->id == $ass['id_job'])
+			{
+				echo '<br>';
+				echo '<a href="job.php?id=';
+				echo $jb->id;
+				echo '">';
+				echo $jb['nazwa'];
+				echo '</a>';
+			}
 		}
-	}	
+
+	}
 	else
 	{	
-		?></ul></div>
+		?>
 		<div class="banner">
 		MUSISZ SIĘ ZALOGOWAĆ!
 		<ul>

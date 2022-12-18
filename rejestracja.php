@@ -53,8 +53,9 @@ if (!isset ($_POST['rejstatus']))
 											</div>
 											<div class ="form-element">
 											<label for="img" class="plik">
-												Załadować PNG
-																					</label>
+											Wybierz zdjęcie profilowe (Wymagany format PNG)
+											<br>
+											</label>
 												<input id='img' name="img" type="file"/>
 											</div>
 												

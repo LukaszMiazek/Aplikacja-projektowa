@@ -95,24 +95,21 @@
 				?><div class="imgcontainer"><img src="Profil/default.png" alt=":(" width="100" height="100" class="obrazek"></div><?php
 			}
 			//$id_pro = $_GET['id'];
-			
 	?>
 
-<br>
-		Zmiana nazwy
+
+		
  		<form action="edit_project.php" method="post">
 		<input type="text" value="<?php echo $tas->nazwa ?>" name="nazwa" required>
 		<input type="hidden" name="task" value= <?php echo '"'.$id_pro.'"'; ?>> 
 		<button type="submit" name="submit">Zmień</button>
 		</form>
 		
-		Zmiana opisu
 		<form action="edit_project.php" method="post">
 		<textarea name="opis" required ><?php echo $tas->opis ?></textarea>
 		<input type="hidden" name="task" value= <?php echo '"'.$id_pro.'"'; ?>> 
 		<button type="submit" name="submit">Zmień</button>
 		</form>
-		
 		
 		Zmiana właściciela projektu
 		<form action="" method="post">
@@ -130,16 +127,13 @@
 		<?php
 	}
 	else
-	{	
+	{
 		?>
-		<div class="banner">
 		MUSISZ SIĘ ZALOGOWAĆ!
-		<ul>
-			<li><a href="index.php">Powrót</a></li></ul>
-		</div>
+		<a href="index.php">Powrót</a>
 		<?php
-		
 	}
+	
 ?>
 </body>
 </html>

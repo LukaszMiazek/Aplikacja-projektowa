@@ -13,7 +13,10 @@
 	require 'rb-mysql.php';
 	R::setup( 'mysql:host=localhost;dbname=tasks','root', '' );
 	
+	require 'notification.php';
+	
 	$jid=$_GET['id'];
+	$chk=false;
 	
 	function delete_directory($dirname) {
  
@@ -41,6 +44,31 @@
     return true;
 	}
 	
+	if (isset ($_POST['deadline']))
+	{
+		$load = R::load('job', $_POST['job_id'] );
+		$load->termin = $_POST['deadline'];
+		R::store( $load );
+	}
+	if (isset ($_POST['correct']))
+	{	
+		$find = R::findOne('assignment', ' id_user = ? AND id_job = ? ', [ $_POST['user_id'], $jid ]);
+		$load = R::load('assignment',$find['id']);
+		$load->status = 3;
+		R::store( $load );
+	}
+	if (isset ($_POST['end']))
+	{	
+		$find = R::findOne('assignment', ' id_user = ? AND id_job = ? ', [ $_POST['user_id'], $jid ]);
+		$load = R::load('assignment',$find['id']);
+		$load->status = 2;
+		R::store( $load );
+		
+		$jb = R::findOne('job', 'id = ?', [$jid] );
+		
+		if($_POST['corr']==1) notification(6,$jb['tworca'],$_SESSION['user'],$jb['task'],$jid);
+		else notification(4,$jb['tworca'],$_SESSION['user'],$jb['task'],$jid);
+	}
 	if (isset ($_POST['file_delete']))
 	{
 		$del=$_POST['file_delete'];
@@ -104,15 +132,31 @@
 	if (isset ($_POST['uzytkownik']))
 	{
 			$log = R::findOne('user', 'login = ? ', [$_POST ['uzytkownik']]);
-		
 			$uz=$log->id;
-
-			$par = R::dispense('assignment');
-			$par->id_user=$uz;
-			$par->id_job=$jid;
-			$par->rola=2;
-			$par->status=1;
-			$id = R::store( $par );
+			
+			$check = R::findOne('part', 'id_user = ? AND id_task = ?', [ $log->id, $_POST['task'] ]);
+		
+			if(!empty($check))
+			{
+				$check2 = R::findOne('assignment', ' id_user = ? AND id_job = ? ', [ $log->id, $jid ]);
+				if(empty($check2))
+				{
+					$par = R::dispense('assignment');
+					$par->id_user=$uz;
+					$par->id_job=$jid;
+					$par->rola=2;
+					$par->status=1;
+					$id = R::store( $par );
+					
+					$job = R::findOne('job', 'id = ? ', [$jid]);
+					notification(2,$uz,$_SESSION['user'],$job['task'],$jid);
+				}
+			}
+			else
+			{
+				$chk=true;
+				//echo "W tym projekcie nie ma użytkownmika o takim loginie ";
+			}
 	}
 	?>
 	<div class="banner">
@@ -126,7 +170,7 @@
 			?>	
 		<ul>
 			<li><a href="index.php">Wyloguj się</a></li>
-			<li><a href="<?php echo "project.php?id='.$us->task.'"?>">Powrót</a></li>
+			<li><a href="<?php echo "project.php?id=".$us['task']?>">Powrót</a></li>
 		</ul>
 		</div>	
 			<div class = "center">
@@ -158,8 +202,13 @@
 		<form action="" method="post">
 		<input type="text" name="uzytkownik" required>
 		<input type="hidden" name="task_id" value= <?php echo '"'.$jid.'"'; ?>> 
+		<input type="hidden" name="task" value= <?php echo '"'.$us['task'].'"'; ?>> 
 		<button type="submit">Dodaj</button>
 		</form>	
+		
+		<?php
+		if($chk==true) echo "W tym projekcie nie ma użytkownmika o takim loginie ";
+		?>
 		
 		<form action="" method="post">
 		<input type="hidden" name="task_id" value= <?php echo '"'.$jid.'"'; ?>> 
@@ -174,6 +223,16 @@
 			echo $us['tresc'];
 			echo '<br>Termin:<br>';
 			echo $us['termin'];
+			if( $access == 1)
+			{
+				?>
+				<form action="" method="post">
+				<input type="hidden" name="job_id" value= <?php echo '"'.$jid.'"'; ?>> 
+				<input type="date" name="deadline" required>
+				<button type="submit" >Zmień termin</button>
+				</form>	
+				<?php
+			}
 			echo '<br>';
 			echo 'Załączniki';
 			echo '<br>';
@@ -196,25 +255,27 @@
 			
 			
 		
-		$part = R::find('assignment', ' id_job = ? ', [$jid] );
+		$part = R::find('assignment', ' id_job = ? AND status > 0', [$jid] );
 		
 		foreach ($part as $usr)
 		{
-			$us = R::findOne('user', 'id = ?', [$usr->id_user] );
+			$u = R::findOne('user', 'id = ?', [$usr->id_user] );
 			
-			echo '<br>'.$us['login'];
+			echo '<br>'.$u['login'];
 			
-			if( $access==1 && $us['id'] != $_SESSION['user'])
+			if($usr->status == 2) echo " (Zakończono)";
+			
+			if( $access==1 && $u['id'] != $_SESSION['user'])
 			{
 			?>
 				<form action="" method="post">
-				<input type="hidden" name="user_id" value= <?php echo '"'.$us['id'].'"'; ?>> 
+				<input type="hidden" name="user_id" value= <?php echo '"'.$u['id'].'"'; ?>> 
 				<input type="hidden" name="task_id" value= <?php echo '"'.$jid.'"'; ?>> 
 				<button type="submit" name="user_del">Usuń</button>
 				</form>	
 			<?php
 			
-			$katalog = 'Pliki/'.$jid.'/'.$us['id'];
+			$katalog = 'Pliki/'.$jid.'/'.$u['id'];
 			if(is_dir($katalog))
 			{
 				echo 'Przesłane pliki: <br>';
@@ -225,7 +286,7 @@
 					if($plik != '.' && $plik != '..')
 					{
 						echo '<a href="';
-						echo 'Pliki/'.$jid.'/'.$us['id'].'/'.$plik;
+						echo 'Pliki/'.$jid.'/'.$u['id'].'/'.$plik;
 						echo '"';
 						echo 'download="'.$plik.'">';
 						echo $plik.'<br>';
@@ -237,17 +298,63 @@
 			
 			echo '<br>';
 		}
-		?>
-		<br>
-		Wyślij Pliki
-		<form action="" method="post" enctype="multipart/form-data">
-			<input type="file" class="custom-file-input"  name="sub[]" multiple="">
-			<input type="hidden" name="user_id" value= <?php echo '"'.$_SESSION['user'].'"'; ?>> 
-			<input type="submit" name='submit' value="Wyślij" target="self">
-		</form>
 		
-		<?php
+		$curr = date("Y-m-d");
 		
+		//echo $curr; echo $us['termin'];
+		
+		if($us['termin'] > $curr && $_SESSION['user'] != $us['tworca'])
+		{
+			if($ass['status']==1 || $ass['status']==3)
+			{
+			?>
+			<br>
+			Wyślij Pliki
+			<form action="" method="post" enctype="multipart/form-data">
+				<input type="file" class="custom-file-input"  name="sub[]" multiple="">
+				<input type="hidden" name="user_id" value= <?php echo '"'.$_SESSION['user'].'"'; ?>> 
+				<input type="submit" name='submit' value="Wyślij" target="self">
+			</form>
+			
+			<?php
+			if($ass['status']==1)
+			{
+			?>
+			Powiadom o ukończeniu zadania
+			<form action="" method="post">
+				<input type="hidden" name="user_id" value= <?php echo '"'.$_SESSION['user'].'"'; ?>> 
+				<input type="hidden" name="corr" value=0> 
+				<input type="submit" name='end' value="Zakońćz" target="self">
+			</form>
+			<?php
+			}
+			else if($ass['status']==3)
+			{
+			?>
+			Powiadom o poprawkach
+			<form action="" method="post">
+				<input type="hidden" name="user_id" value= <?php echo '"'.$_SESSION['user'].'"'; ?>>
+				<input type="hidden" name="corr" value=1> 
+				<input type="submit" name='end' value="Popraw" target="self">
+			</form>
+			<?php
+			}
+			}
+			else
+			{
+				echo "Zadanie ukończone!";
+				?>
+				<form action="" method="post">
+				<input type="hidden" name="user_id" value= <?php echo '"'.$_SESSION['user'].'"'; ?>> 
+				<input type="submit" name='correct' value="Popraw" target="self">
+				</form>
+				<?php
+			}
+		}
+		else if($us['termin'] <= $curr)
+		{
+			echo "Temin zadania minął <br>";
+		}
 		$katalog = 'Pliki/'.$jid.'/'.$_SESSION['user'];
 		if(is_dir($katalog))
 		{
@@ -269,12 +376,15 @@
 					
 					$file = str_replace(" ", "_???_space_???_", $file);
 					
+					if($ass['status']==1 || $ass['status']==3)
+					{
 					?>
 						<form action="" method="post">
 						<input type="hidden" name="file_delete" value= <?php echo $file; ?>> 
 						<input type="submit" name='submit' value="Usuń" target="self">
 						</form>
 					<?php
+					}
 				}
 			}
 		}

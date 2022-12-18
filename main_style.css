@@ -2,8 +2,6 @@
 
 html{
 	 font-family: Arial, sans-serif;
-	 width: 100%;
-	 height: 100%;
 }
 
 
@@ -53,7 +51,6 @@ body{
 }
 
 
-
 .form-element{
   padding: 16px;
   text-align: center;
@@ -65,7 +62,9 @@ body{
 
 
 img.obrazek{
+	width: 12%;
 	border-radius: 50%;
+	
 }
 
 .button{
@@ -74,45 +73,23 @@ img.obrazek{
 
 
 button {
-  font-size:13px;
+	font-size:12px;
   background-color: #04AA6D;
   color: white;
-  padding: 12px 0px;
+  padding: 14px 0px;
   margin: 8px 0;
   border: none;
   cursor: pointer;
-  width: 7%;
-  border-radius: 12px;
+  width: 10%;
+  border-radius: 15px;
   text-align: center;
 }
 
 button:hover {
   opacity: 0.8;
-
 }
 
 input{
 	padding: 10px;
-	width:7%;
+	width:16%;
 }
-
-/*textarea{
-	height: 100px;
-	width: 140px;
-}
-*/
-
-
-
-.array_projects ul li{
-	list-style:none;
-	display: inline-block;
-	margin: 10px;
-	padding-right: 0px;
-}
-
-.array_projects ul li a {
-	text-decoration: none;
-	color: #fff;
-	text-transform: uppercase;
-	text-align: center;}
