@@ -118,7 +118,7 @@
 		echo "$log->imie $log->nazwisko";
 			?>	
 		<ul>
-			<li><a href="index.php">Wyloguj się</a></li>
+			<li><a href="<?php echo "index.php?wlog="?>">Wyloguj się</a></li>
 			<li><a href="main.php">Powrót</a></li>
 		</ul>
 		</div>		

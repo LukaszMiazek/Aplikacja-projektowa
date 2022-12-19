@@ -10,12 +10,14 @@
 </head>
 <body>  
 <?php
-session_start();	
-if (isset ($_POST['wlog']))
+session_start();
+
+if(isset ($_GET['wlog']))
 {
-		unset($_POST['wlog']);
-		session_destroy();
-}
+	session_destroy();
+	session_start();
+}	
+
 if (isset ($_POST['login']))
 {
 	require 'rb-mysql.php';

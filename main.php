@@ -25,7 +25,7 @@
 		echo "$log->imie $log->nazwisko";
 			?>
 	<ul>
-			<li><a href="index.php">Wyloguj się</a></li>
+			<li><a href="<?php echo "index.php?wlog="?>">Wyloguj się</a></li>
 			<li><a href="edit.php">Edytuj konto</a></li>
 			<li><a href="new.php">Utwórz nowy projekt</a></li>
 			</ul>
