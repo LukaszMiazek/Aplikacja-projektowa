@@ -89,10 +89,11 @@ button:hover {
 
 input{
 	padding: 8px;
-	width:16%;
+	width:13%;
 }
 textarea{
-	padding: 45px;
+	padding: 50px;
+	width: 9%;
 }
 
 .banner2 a{

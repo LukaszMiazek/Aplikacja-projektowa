@@ -148,16 +148,16 @@
 
 			if( $access == 3 )
 			{
-		?>
-			<form action="edit_project.php" method="post">
+		?>	<div class = "buttons">
+			<form class = "inline" action="edit_project.php" method="post">
 				<input type="hidden" name="task" value= <?php echo '"'.$id_pro.'"'; ?>> 
 				<button type="submit">Edytuj projekt</button>
 			</form>	
-			
-			<form action="" method="post">
+		
+			<form class = "inline" action="" method="post">
 			<input type="hidden" name="task_delete" value= <?php echo '"'.$id_pro.'"'; ?>> 
 			<button type="submit">Usuń projekt</button>
-			</form>	
+			</form>	</div>
 		<?php 
 			}
 		?>
@@ -165,17 +165,16 @@
 		<?php 
 			$us = R::findOne('task', 'id = ?', [$id_pro] );
 			
-			echo 'NAZWA: ';
-			echo $us['nazwa'];
-			echo '<br>OPIS: ';
-			echo $us['opis'];
+			
+			echo "<p style='font-size: 22px; color:#FFD700;'>". $us['nazwa'] . "</p>"; 
+			echo "<p style='font-size: 18px; color:white;'>".'OPIS: <br>'. $us['opis']. "</p>"; 
 			
 			
 		if( $access > 1)
 		{
 		?>
 		
-		<br><br>
+		<br>
 		Dodaj użytkownika
 		<form action="" method="post">
 		<input type="text" name="uzytkownik" required>
@@ -206,12 +205,12 @@
 			
 			$nm = R::findOne('role_names', 'id = ? AND id != 1', [$usr->role] );
 			
-			echo '<br>'.$us['login'].' '.$nm['nazwa'];
+			echo '<br>'.$us['login'].' - '.$nm['nazwa'];
 			
 			if( $access==3 && $usr->role!=3 || $access==2 && $usr->role==1)
 			{
-			?>
-				<form action="" method="post">
+			?><br><br>
+				<form class = "inline" action="" method="post">
 				<input type="hidden" name="user_id" value= <?php echo '"'.$us['id'].'"'; ?>> 
 				<input type="hidden" name="task_id" value= <?php echo '"'.$id_pro.'"'; ?>> 
 				<button type="submit" name="user_del">Usuń</button>
@@ -223,7 +222,7 @@
 			if( $access==3 && $usr->role!=3 )
 			{
 			?>
-				<form action="" method="post">
+				<form class = "inline" action="" method="post">
 				<input type="hidden" name="user_id" value= <?php echo '"'.$us['id'].'"'; ?>>
 				<input type="hidden" name="task_id" value= <?php echo '"'.$id_pro.'"'; ?>> 
 				<button type="submit" name="user_mod">Moderator</button>
@@ -235,10 +234,11 @@
 		if( $access > 1)
 		{
 		?>
-		<form action="new_job.php" method="post">
+		<form  action="new_job.php" method="post">
 		<input type="hidden" name="task_id" value= <?php echo '"'.$id_pro.'"'; ?>> 
 		<button type="submit">Dodaj nowe zadanie</button>
 		</form>	
+		<br>
 		ZADANIA:
 		 <div class="array_projects"><ul>
 		<?php

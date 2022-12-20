@@ -78,14 +78,14 @@ img.obrazek{
 
 
 button {
-  font-size:10px;
+  font-size:12px;
   background-color: #04AA6D;
   color: white;
-  padding: 7px 0px;
-  margin: 5px 0;
+  padding: 8px 0px;
+  margin: 6px 0;
   border: none;
   cursor: pointer;
-  width: 6%;
+  width: 7%;
   border-radius: 12px;
   text-align: center;
 }
@@ -97,13 +97,10 @@ button:hover {
 
 input{
 	padding: 10px;
-	width:7%;
+	width:6%;
 }
 
-input{
-	padding: 8px;
-	width:16%;
-}
+
 textarea{
 	padding: 45px;
 }
@@ -123,7 +120,7 @@ textarea{
 
 .array_projects ul li a {
 	text-decoration: none;
-	color: #fff;
+	color: #FFD700;
 	text-transform: uppercase;
 	text-align: center;
 }
@@ -144,4 +141,8 @@ textarea{
 
 .banner2{
 	text-align: center;
+}
+
+.inline{
+ display: inline;
 }

@@ -61,7 +61,9 @@
 														<br>
 														<input type="file" class="custom-file-input"  name="image[]" multiple="">
 														<br>
-														<input type="submit" name='submit' value="Utwórz" target="self">
+														
+														<button type="submit" value="Utwórz konto" name="submit" target="self">Utwórz</button>
+												
 														<input type="hidden" name="task_id" value= <?php echo '"'.$tid.'"'; ?>> 
 														</form>
 													</div>

@@ -55,7 +55,7 @@
 													<div class="form-element">
 														Nazwa projektu:
 														<br>
-														<div
+													
 														<input type="text" name="nazwa" required>
 														<br>
 														Opis:

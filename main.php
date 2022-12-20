@@ -58,7 +58,7 @@
 				$na = R::findOne('task', 'id = ?',[$pro->id_task] );
 				
 				?>
-				
+			
 				<li><a href="project.php?id=<?php echo "$pro->id_task"?>"><?php echo "$na->nazwa"?></a></li>
 				
 				<?php
