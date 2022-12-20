@@ -129,13 +129,17 @@
 			header('Location: project.php?id='.$tid);
 		}
 	}
-		else
-		{
-			?>
-			MUSISZ SIĘ ZALOGOWAĆ!
+	else
+	{	
+	
+		?></div>
+		<div class="banner2">
+		Musisz się zalogować <br><br>
 			<a href="index.php">Powrót</a>
-			<?php
-		}
-	?>
+		</div>
+		<?php
+		
+	}
+?>
 </body>
 </html>

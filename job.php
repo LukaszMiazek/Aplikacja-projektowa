@@ -221,7 +221,7 @@
 			echo $us['nazwa'];
 			echo '<br>Tresc:<br>';
 			echo $us['tresc'];
-			echo '<br>Termin:<br>';
+			echo '<br><br>Termin:<br>';
 			echo $us['termin'];
 			if( $access == 1)
 			{
@@ -391,16 +391,15 @@
 	}
 	else
 	{	
-		?>
-		<div class="banner">
-		MUSISZ SIĘ ZALOGOWAĆ!
-		<ul>
-			<li><a href="index.php">Powrót</a></li></ul>
+	
+		?></div>
+		<div class="banner2">
+		Musisz się zalogować <br><br>
+			<a href="index.php">Powrót</a>
 		</div>
 		<?php
 		
 	}
 ?>
-</div>
 </body>
 </html>

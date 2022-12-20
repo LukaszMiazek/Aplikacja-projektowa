@@ -153,6 +153,11 @@
 				<input type="hidden" name="task" value= <?php echo '"'.$id_pro.'"'; ?>> 
 				<button type="submit">Edytuj projekt</button>
 			</form>	
+			
+			<form action="" method="post">
+			<input type="hidden" name="task_delete" value= <?php echo '"'.$id_pro.'"'; ?>> 
+			<button type="submit">Usuń projekt</button>
+			</form>	
 		<?php 
 			}
 		?>
@@ -160,7 +165,7 @@
 		<?php 
 			$us = R::findOne('task', 'id = ?', [$id_pro] );
 			
-			echo '<br>NAZWA: ';
+			echo 'NAZWA: ';
 			echo $us['nazwa'];
 			echo '<br>OPIS: ';
 			echo $us['opis'];
@@ -170,7 +175,7 @@
 		{
 		?>
 		
-		<br>
+		<br><br>
 		Dodaj użytkownika
 		<form action="" method="post">
 		<input type="text" name="uzytkownik" required>
@@ -186,10 +191,8 @@
 		{
 			?>
 			
-			<form action="" method="post">
-			<input type="hidden" name="task_delete" value= <?php echo '"'.$id_pro.'"'; ?>> 
-			<button type="submit">Usuń projekt</button>
-			</form>	
+		
+			
 			
 			<?php
 		}
@@ -236,6 +239,8 @@
 		<input type="hidden" name="task_id" value= <?php echo '"'.$id_pro.'"'; ?>> 
 		<button type="submit">Dodaj nowe zadanie</button>
 		</form>	
+		ZADANIA:
+		 <div class="array_projects"><ul>
 		<?php
 		}
 		
@@ -245,25 +250,19 @@
 		{
 			$ass = R::findOne('assignment', 'id_job = ? AND id_user = ?', [$jb->id, $_SESSION['user']] );
 			
-			if($jb->id == $ass['id_job'])
-			{
-				echo '<br>';
-				echo '<a href="job.php?id=';
-				echo $jb->id;
-				echo '">';
-				echo $jb['nazwa'];
-				echo '</a>';
-			}
-		}
+			?>
+				<li><a href="job.php?id=<?php echo "$jb->id"?>"><?php echo "$jb->nazwa"?></a></li>
+			<?php
 
-	}
+		}
+	}	
 	else
 	{	
-		?>
-		<div class="banner">
-		MUSISZ SIĘ ZALOGOWAĆ!
-		<ul>
-			<li><a href="index.php">Powrót</a></li></ul>
+	
+		?></div>
+		<div class="banner2">
+		Musisz się zalogować <br><br>
+			<a href="index.php">Powrót</a>
 		</div>
 		<?php
 		

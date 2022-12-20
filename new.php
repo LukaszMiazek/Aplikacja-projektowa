@@ -55,6 +55,7 @@
 													<div class="form-element">
 														Nazwa projektu:
 														<br>
+														<div
 														<input type="text" name="nazwa" required>
 														<br>
 														Opis:
@@ -92,14 +93,17 @@
 			header('Location: project.php?id='.$ids);
 		}
 	}
-		else
-		{
-			?>
-			MUSISZ SIĘ ZALOGOWAĆ!
+	else
+	{	
+	
+		?></div>
+		<div class="banner2">
+		Musisz się zalogować <br><br>
 			<a href="index.php">Powrót</a>
-			<?php
-		}
-	?>
-	</div>
+		</div>
+		<?php
+		
+	}
+?>
 </body>
 </html>

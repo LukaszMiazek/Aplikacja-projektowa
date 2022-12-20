@@ -127,13 +127,16 @@
 		<?php
 	}
 	else
-	{
-		?>
-		MUSISZ SIĘ ZALOGOWAĆ!
-		<a href="index.php">Powrót</a>
-		<?php
-	}
+	{	
 	
+		?></div>
+		<div class="banner2">
+		Musisz się zalogować <br><br>
+			<a href="index.php">Powrót</a>
+		</div>
+		<?php
+		
+	}
 ?>
 </body>
 </html>

@@ -62,9 +62,7 @@ body{
 
 
 img.obrazek{
-	width: 10%;
-	border-radius: 50%;
-	
+	border-radius: 50%;	
 }
 
 .button{
@@ -73,15 +71,15 @@ img.obrazek{
 
 
 button {
-	font-size:12px;
+  font-size:10px;
   background-color: #04AA6D;
   color: white;
-  padding: 14px 0px;
-  margin: 8px 0;
+  padding: 7px 0px;
+  margin: 5px 0;
   border: none;
   cursor: pointer;
-  width: 10%;
-  border-radius: 15px;
+  width: 6%;
+  border-radius: 12px;
   text-align: center;
 }
 
@@ -95,4 +93,13 @@ input{
 }
 textarea{
 	padding: 45px;
+}
+
+.banner2 a{
+	text-decoration: none;
+	color: #fff;
+}
+
+.banner2{
+	text-align: center;
 }
