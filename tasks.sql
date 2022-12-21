@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 13 Lis 2022, 19:51
+-- Czas generowania: 20 Gru 2022, 19:09
 -- Wersja serwera: 10.4.8-MariaDB
 -- Wersja PHP: 7.1.32
 
@@ -25,6 +25,72 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Struktura tabeli dla tabeli `assignment`
+--
+
+CREATE TABLE `assignment` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `id_user` int(11) UNSIGNED DEFAULT NULL,
+  `id_job` int(11) UNSIGNED DEFAULT NULL,
+  `rola` int(11) UNSIGNED DEFAULT NULL,
+  `status` int(11) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Zrzut danych tabeli `assignment`
+--
+
+INSERT INTO `assignment` (`id`, `id_user`, `id_job`, `rola`, `status`) VALUES
+(41, 15, 19, 1, 0),
+(42, 16, 19, 2, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `job`
+--
+
+CREATE TABLE `job` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `nazwa` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `tresc` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `termin` date DEFAULT NULL,
+  `task` int(11) UNSIGNED DEFAULT NULL,
+  `tworca` int(11) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Zrzut danych tabeli `job`
+--
+
+INSERT INTO `job` (`id`, `nazwa`, `tresc`, `termin`, `task`, `tworca`) VALUES
+(19, 'zadanie 1', 'tresc1', '2022-12-31', 15, 15);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `notification`
+--
+
+CREATE TABLE `notification` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `tresc` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id_user` int(11) UNSIGNED DEFAULT NULL,
+  `data` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Zrzut danych tabeli `notification`
+--
+
+INSERT INTO `notification` (`id`, `tresc`, `id_user`, `data`) VALUES
+(58, 'Zostałeś(aś) dodana do nowego projektu: projekt1 przez: user1', 16, '2022-12-20 19:05:40'),
+(59, 'Zostałeś(aś) dodana do nowego projektu: projekt1 przez: user1', 22, '2022-12-20 19:06:26'),
+(60, 'Zostało ci przydzielone nowe zadanie: zadanie 1 w projekcie projekt1 przez: user1', 16, '2022-12-20 19:08:06');
+
+-- --------------------------------------------------------
+
+--
 -- Struktura tabeli dla tabeli `part`
 --
 
@@ -40,9 +106,9 @@ CREATE TABLE `part` (
 --
 
 INSERT INTO `part` (`id`, `id_user`, `id_task`, `role`) VALUES
-(2, 15, 3, 3),
-(3, 16, 3, 2),
-(23, 17, 3, 1);
+(42, 15, 15, 3),
+(43, 16, 15, 2),
+(44, 22, 15, 1);
 
 -- --------------------------------------------------------
 
@@ -74,7 +140,7 @@ CREATE TABLE `task` (
   `id` int(11) UNSIGNED NOT NULL,
   `nazwa` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `opis` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `wlasciciel` int(11) UNSIGNED DEFAULT NULL
+  `wlasciciel` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -82,7 +148,7 @@ CREATE TABLE `task` (
 --
 
 INSERT INTO `task` (`id`, `nazwa`, `opis`, `wlasciciel`) VALUES
-(3, 'pro2', 'aba', 15);
+(15, 'projekt1', 'opis1', '15');
 
 -- --------------------------------------------------------
 
@@ -105,11 +171,29 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`id`, `login`, `haslo`, `imie`, `nazwisko`) VALUES
 (15, 'user1', 'haslo1', 'tomek', 'ryba'),
 (16, 'user2', 'haslo2', 'hubert', 'lama'),
-(17, 'user3', 'haslo3', 'ewa', 'jabłko');
+(22, 'user3', 'haslo3', 'Adam', 'Stary');
 
 --
 -- Indeksy dla zrzutów tabel
 --
+
+--
+-- Indeksy dla tabeli `assignment`
+--
+ALTER TABLE `assignment`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeksy dla tabeli `job`
+--
+ALTER TABLE `job`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeksy dla tabeli `notification`
+--
+ALTER TABLE `notification`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indeksy dla tabeli `part`
@@ -140,10 +224,28 @@ ALTER TABLE `user`
 --
 
 --
+-- AUTO_INCREMENT dla tabeli `assignment`
+--
+ALTER TABLE `assignment`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+
+--
+-- AUTO_INCREMENT dla tabeli `job`
+--
+ALTER TABLE `job`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
+--
+-- AUTO_INCREMENT dla tabeli `notification`
+--
+ALTER TABLE `notification`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+
+--
 -- AUTO_INCREMENT dla tabeli `part`
 --
 ALTER TABLE `part`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT dla tabeli `role_names`
@@ -155,13 +257,13 @@ ALTER TABLE `role_names`
 -- AUTO_INCREMENT dla tabeli `task`
 --
 ALTER TABLE `task`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT dla tabeli `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

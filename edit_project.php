@@ -53,6 +53,10 @@
 			$zm = R::load( 'part', $rol['id'] );
 			$zm->role = 2;
 			R::store( $zm );
+			
+			$wl = R::load( 'task', $_POST['task_id'] );
+			$wl->wlasciciel = $log['id'];
+			R::store( $wl );
 		
 			header('Location: main.php');
 	}

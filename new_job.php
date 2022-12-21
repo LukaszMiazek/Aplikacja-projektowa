@@ -24,7 +24,7 @@
 			?>	
 		<ul>
 			<li><a href="<?php echo "index.php?wlog="?>">Wyloguj się</a></li>
-			<li><a href="main.">Powrót</a></li>
+			<li><a href="<?php echo "project.php?id=".$_POST['task_id']?>">Powrót</a></li>
 		</ul>
 		</div>	
 			<div class = "center">
